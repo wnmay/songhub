@@ -1,0 +1,42 @@
+# Binaries
+/backend/bin/
+/backend/*.exe
+/backend/*.exe~
+/backend/*.dll
+/backend/*.so
+/backend/*.dylib
+/backend/*.test
+
+# Output of go build
+/backend/*.out
+
+# Vendor (if you're not committing dependencies)
+/backend/vendor/
+
+# Go workspace
+/backend/go.sum
+/backend/go.work
+/backend/go.work.sum
+
+# IDE/editor specific
+.vscode/
+.idea/
+*.swp
+*.swo
+*.bak
+
+# OS generated
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Env/config
+/backend/.env
+/backend/.env.*
+/backend/config.yaml
+/backend/*.local.*
+
+.env
+.env.*
