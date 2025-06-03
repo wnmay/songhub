@@ -7,6 +7,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
 	"github.com/wnmay/songhub/backend/internal/config"
+	"github.com/wnmay/songhub/backend/internal/migration"
 )
 
 func main() {
@@ -16,7 +17,7 @@ func main() {
 	}
 
 	db := config.ConnectDB()
-	_ = db
+	migration.Migrate(db)
 
 
 	app := fiber.New()
