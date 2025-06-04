@@ -7,7 +7,10 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
 	"github.com/wnmay/songhub/backend/internal/config"
+	"github.com/wnmay/songhub/backend/internal/handler"
 	"github.com/wnmay/songhub/backend/internal/migration"
+	"github.com/wnmay/songhub/backend/internal/repository"
+	"github.com/wnmay/songhub/backend/internal/usecase"
 )
 
 func main() {
@@ -22,10 +25,12 @@ func main() {
 
 	app := fiber.New()
 
-	app.Get("/health", func(c *fiber.Ctx) error {
-		return c.SendString("Backend is alive")
-	})
+	authRepo := repository.NewGormAuthRepository(db)
+	authService := usecase.NewAuthService(authRepo)
+	authHandler := handler.NewAuthHandler(authService)
 
+	app.Post("api/auth/register", authHandler.Register)
+	
 	if err := app.Listen(":8080"); err != nil {
 		log.Fatalf("Server failed: %v", err)
 	}
