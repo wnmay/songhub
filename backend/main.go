@@ -30,6 +30,7 @@ func main() {
 	authHandler := handler.NewAuthHandler(authService)
 
 	app.Post("api/auth/register", authHandler.Register)
+	app.Post("api/auth/login", authHandler.Login)
 	
 	if err := app.Listen(":8080"); err != nil {
 		log.Fatalf("Server failed: %v", err)

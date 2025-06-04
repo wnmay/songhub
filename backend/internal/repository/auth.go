@@ -17,3 +17,11 @@ func NewGormAuthRepository (db *gorm.DB ) usecase.AuthRepository{
 func (r *GormAuthRepository) Create(user entities.User) error{
 	return r.db.Create(&user).Error
 }
+
+func (r *GormAuthRepository) GetEmail(email, password string) (*entities.User,error){
+	var user entities.User
+	if err := r.db.Where("email = ?", email).First(&user).Error; err!=nil{
+		return nil,err
+	}
+	return &user,nil
+}
