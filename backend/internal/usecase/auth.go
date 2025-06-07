@@ -10,11 +10,14 @@ import (
 type AuthUsecase interface {
 	Register(user entities.User) error
 	Login(email,password string) (string, error)
+
 }
 
 type AuthRepository interface{
-	Create(user entities.User) error
+	Create(user *entities.User) error
 	GetEmail(email,password string) (*entities.User, error)
+	CreateListener(listener *entities.Listener) error
+	CreateArtist(artist *entities.Artist) error
 }
 
 type AuthService struct{
@@ -25,16 +28,33 @@ func NewAuthService(repo AuthRepository) AuthUsecase{
 	return &AuthService{repo: repo}
 }
 
-func (s *AuthService) Register(user entities.User) error{
-	hash, err := hash.Hash(user.Password)
-	if err!=nil{
+func (s *AuthService) Register(user entities.User) error {
+	hashed, err := hash.Hash(user.Password)
+	if err != nil {
+		return err
+	}
+	user.Password = hashed
+
+	if err := s.repo.Create(&user); err != nil {
 		return err
 	}
 	
-	user.Password = hash
+	switch user.Role {
+	case entities.RoleListener:
+		listener := &entities.Listener{UserID: user.ID}
+		if err := s.repo.CreateListener(listener); err != nil {
+			return err
+		}
+	case entities.RoleArtist:
+		artist := &entities.Artist{UserID: user.ID}
+		if err := s.repo.CreateArtist(artist); err != nil {
+			return err
+		}
+	}
 
-	return s.repo.Create(user)
+	return nil
 }
+
 
 func (s *AuthService) Login(email,password string) (string, error){
 	user, err := s.repo.GetEmail(email,password)

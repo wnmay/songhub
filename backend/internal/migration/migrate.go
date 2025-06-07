@@ -10,6 +10,8 @@ import (
 func Migrate(db *gorm.DB) {
     err := db.AutoMigrate(
         &entities.User{},
+        &entities.Artist{},
+        &entities.Listener{},
     )
     if err != nil {
         log.Fatalf("Migration failed: %v", err)

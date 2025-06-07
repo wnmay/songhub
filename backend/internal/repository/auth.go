@@ -14,7 +14,7 @@ func NewGormAuthRepository (db *gorm.DB ) usecase.AuthRepository{
 	return &GormAuthRepository{db:db}
 }
 
-func (r *GormAuthRepository) Create(user entities.User) error{
+func (r *GormAuthRepository) Create(user *entities.User) error{
 	return r.db.Create(&user).Error
 }
 
@@ -24,4 +24,12 @@ func (r *GormAuthRepository) GetEmail(email, password string) (*entities.User,er
 		return nil,err
 	}
 	return &user,nil
+}
+
+func (r *GormAuthRepository) CreateListener(listener *entities.Listener) error {
+	return r.db.Create(listener).Error
+}
+
+func (r *GormAuthRepository) CreateArtist(artist *entities.Artist) error {
+	return r.db.Create(artist).Error
 }
