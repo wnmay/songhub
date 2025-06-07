@@ -1,6 +1,7 @@
 package jwt
 
 import (
+	"log"
 	"os"
 	"time"
 
@@ -14,5 +15,6 @@ func GenerateToken(userID uint, role string) (string, error) {
 		"exp":     time.Now().Add(time.Hour * 72).Unix(),
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	log.Println([]byte(os.Getenv("JWT_SECRET")))
 	return token.SignedString([]byte(os.Getenv("JWT_SECRET")))
 }
