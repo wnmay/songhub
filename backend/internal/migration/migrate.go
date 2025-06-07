@@ -12,6 +12,7 @@ func Migrate(db *gorm.DB) {
         &entities.User{},
         &entities.Artist{},
         &entities.Listener{},
+        &entities.Song{},
     )
     if err != nil {
         log.Fatalf("Migration failed: %v", err)
