@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"log"
 	"os"
 
 	"github.com/gofiber/fiber/v2"
@@ -22,7 +21,6 @@ func AuthMiddleware() fiber.Handler {
 		if err != nil || !token.Valid {
 			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Invalid token"})
 		}
-		log.Println("Token from cookie:", cookie)
 
 
 		if claims, ok := token.Claims.(jwt.MapClaims); ok {

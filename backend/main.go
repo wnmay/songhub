@@ -44,12 +44,6 @@ func main() {
 	return middleware.AuthMiddleware()(c)
 	})
 
-	app.Get("/api/listener",                 
-	func(c *fiber.Ctx) error {
-		return c.JSON(fiber.Map{"message": "Access granted!"})
-	},
-)
-
 	if err := app.Listen(":8080"); err != nil {
 		log.Fatalf("Server failed: %v", err)
 	}
