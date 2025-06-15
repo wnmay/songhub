@@ -30,10 +30,11 @@ func main() {
 	authRepo := repository.NewGormAuthRepository(db)
 	authService := usecase.NewAuthService(authRepo)
 	authHandler := handler.NewAuthHandler(authService)
-	
-	log.Println([]string{string(entities.RoleArtist)})
-	log.Println([]string{"artist"})
 
+	songRepo := repository.NewGormSongRepository(db)
+	songService := usecase.NewSongService(songRepo)
+	songHandler := handler.NewSongHandler(songService)
+	
 	app.Post("api/auth/register", authHandler.Register)
 	app.Post("api/auth/login", authHandler.Login)
 
@@ -43,6 +44,8 @@ func main() {
 	}
 	return middleware.AuthMiddleware()(c)
 	})
+
+	app.Post("api/song", middleware.RoleMiddleware([]string{string(entities.RoleArtist)}),songHandler.CreateSong)
 
 	if err := app.Listen(":8080"); err != nil {
 		log.Fatalf("Server failed: %v", err)
